@@ -1,0 +1,9 @@
+server:
+  port: 3434
+
+spring:
+  application:
+    name: GroceryFinderV2
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/grocery_finder_db
