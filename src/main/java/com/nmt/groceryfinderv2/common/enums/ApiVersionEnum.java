@@ -4,8 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum ApiVersionEnum {
-    API_VERSION_V1("2024-08-24"),
-    API_VERSION_V2("2024-09-24"),
+    API_VERSION_V1("2024-11-15"),
+    API_VERSION_V2("2025-01-15"),
     ;
     private final String timestamp;
     ApiVersionEnum(String timestamp){
