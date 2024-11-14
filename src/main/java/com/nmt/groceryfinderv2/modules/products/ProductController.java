@@ -1,7 +1,6 @@
-package com.nmt.groceryfinderv2.controllers;
+package com.nmt.groceryfinderv2.modules.products;
 
-import com.nmt.groceryfinderv2.documents.ProductDocument;
-import com.nmt.groceryfinderv2.services.ProductService;
+import com.nmt.groceryfinderv2.modules.products.domain.ProductDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +27,7 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<List<ProductDocument>> getAllProducts() {
-        List<ProductDocument> products = productService.findAllProducts();
+        List<ProductDocument> products = productService.getAll();
         return ResponseEntity.ok(products);
     }
 }

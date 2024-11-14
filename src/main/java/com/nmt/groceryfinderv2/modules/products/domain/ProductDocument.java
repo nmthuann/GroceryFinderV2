@@ -1,10 +1,11 @@
-package com.nmt.groceryfinderv2.documents;
+package com.nmt.groceryfinderv2.modules.products.domain;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import java.time.LocalDateTime;
@@ -25,6 +26,7 @@ public class ProductDocument {
     private String slug;
 
     @Field("product_name")
+    @Indexed(unique = true)
     private String productName;
 
     @Field("normalized_name")
@@ -41,9 +43,15 @@ public class ProductDocument {
 
     private String description;
 
+    private String category;
+
+    private String brand;
+
     private String currency;
 
     private Integer sold;
+
+    private Integer stock;
 
     @Field("view_count")
     private Integer viewCount = 0;
@@ -55,9 +63,6 @@ public class ProductDocument {
 
     @Field("price_history")
     private List<PriceHistory> priceHistory;
-
-    @Field("inventory")
-    private Inventory inventory;
 
     @Field("created_at")
     @CreatedDate

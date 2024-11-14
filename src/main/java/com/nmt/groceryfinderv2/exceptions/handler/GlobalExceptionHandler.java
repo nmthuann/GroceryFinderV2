@@ -1,9 +1,8 @@
 package com.nmt.groceryfinderv2.exceptions.handler;
 
-import com.nmt.groceryfinder.exceptions.ModuleException;
-import com.nmt.groceryfinder.exceptions.RestErrorResponse;
+import com.nmt.groceryfinderv2.exceptions.ModuleException;
+import com.nmt.groceryfinderv2.exceptions.RestErrorResponse;
 import io.jsonwebtoken.JwtException;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -140,38 +139,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 statusCode.value(),
                 statusCode.getReasonPhrase(),
                 JwtException.class.getName(),
-                ex.getMessage(),
-                "",
-                LocalDateTime.now(),
-                path
-        );
-        return new ResponseEntity<>(re, statusCode);
-    }
-
-    /**
-     * Handles EntityNotFoundException, typically thrown when a requested entity is not found in the database.
-     *
-     * @param request the HttpServletRequest that resulted in the exception
-     * @param ex the exception that was thrown
-     * @return a ResponseEntity containing a RestErrorResponse with a 404 Not Found status
-     */
-    @ExceptionHandler(EntityNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ResponseBody
-    public ResponseEntity<RestErrorResponse> handleEntityNotFoundException(
-            HttpServletRequest request,
-            EntityNotFoundException ex) {
-
-        HttpStatus statusCode = HttpStatus.NOT_FOUND;
-        String path = request.getRequestURI();
-
-        // Log the exception details
-        logger.error("Entity Not Found on {}: {}", path, ex.getMessage());
-
-        RestErrorResponse re = new RestErrorResponse(
-                statusCode.value(),
-                statusCode.getReasonPhrase(),
-                EntityNotFoundException.class.getName(),
                 ex.getMessage(),
                 "",
                 LocalDateTime.now(),

@@ -1,6 +1,4 @@
 package com.nmt.groceryfinderv2.common.dtos;
 
-import java.util.UUID;
-
-public record Payload(UUID userId, String email, String role) {
+public record Payload(String userId, String email, String role) {
 }

@@ -31,7 +31,7 @@ public class JwtServiceUtil {
             @Value("${jwt.secret-key}") String jwtSecretKey,
             @Value("${jwt.refresh-secret-key}") String refreshJwtSecretKey,
             @Value("${jwt.access.token.expiration}") Long accessTokenExpiration,
-            @Value("${refresh.jwt.access.token.expiration}") Long refreshTokenExpiration
+            @Value("${jwt.refresh.jwt.access.token.expiration}") Long refreshTokenExpiration
     ) {
         this.jwtSecretKey = jwtSecretKey;
         this.refreshJwtSecretKey = refreshJwtSecretKey;

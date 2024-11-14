@@ -1,7 +1,6 @@
-package com.nmt.groceryfinderv2.documents;
+package com.nmt.groceryfinderv2.modules.products.domain;
 
 import org.springframework.data.mongodb.core.mapping.Field;
-
 import java.time.LocalDateTime;
 
 /**

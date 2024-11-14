@@ -1,4 +1,4 @@
-package com.nmt.groceryfinderv2.documents;
+package com.nmt.groceryfinderv2.modules.products.domain;
 
 import lombok.Getter;
 import lombok.Setter;
