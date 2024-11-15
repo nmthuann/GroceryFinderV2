@@ -43,15 +43,6 @@ public class UserDocument {
     @Field("refresh_token")
     private String refreshToken = null;
 
-    @Field("auth_method")
-    private String authMethod;
-
     @Field("role")
     private String role;
-
-    @CreatedDate
-    private Instant createdAt;
-
-    @LastModifiedDate
-    private Instant updatedAt;
 }

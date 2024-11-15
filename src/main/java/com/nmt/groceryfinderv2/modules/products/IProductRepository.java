@@ -6,6 +6,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Optional;
+
 /**
  * @author LENOVO
  * @project GroceryFinderV2
@@ -14,4 +17,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface IProductRepository extends MongoRepository<ProductDocument, String> {
     Page<ProductDocument> findAll(Pageable pageable);
+    Optional<ProductDocument> findBySlug(String slug);
+    Optional<ProductDocument> findByBarcode(String barcode);
+    List<ProductDocument> findByBrand(String brand);
+    List<ProductDocument> findByCategory(String category);
+    Optional<ProductDocument> findByProductName(String productName);
 }

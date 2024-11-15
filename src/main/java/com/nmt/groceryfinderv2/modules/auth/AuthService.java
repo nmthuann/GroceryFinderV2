@@ -25,9 +25,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AuthService implements IAuthService {
-
     private static final String BASE_STRING_NUMERIC = "0123456789";
-
     private final JwtServiceUtil jwtServiceUtil;
     private final PasswordUtil passwordUtil;
     private final MailServiceUtil mailServiceUtil;
@@ -89,18 +87,22 @@ public class AuthService implements IAuthService {
         );
     }
 
-    @Override
-    public RegisterAdminResponseDto createAccount(
+    private RegisterAdminResponseDto createAccount (
             CreateAccountRequestDto data
     ) throws AuthException, MessagingException {
         if (this.userService.getAccountUserByEmail(data.email()).isPresent()) {
             throw new AuthException(AuthExceptionMessages.EMAIL_EXIST.getMessage());
         }
+
         String randomPassword = this.passwordUtil.randomPassword(8, BASE_STRING_NUMERIC);
+
         String htmlContent = this.mailServiceUtil.generateAdminRegistrationEmailContent(data.email(), randomPassword);
+
         String subject = SubjectMailEnum.REGISTER_ADMIN_SUBJECT.getSubject();
         this.mailServiceUtil.sendHtmlEmail(data.email(), subject, htmlContent);
+
         String hashedPassword = this.passwordUtil.hashPassword(randomPassword);
+
         CreateUserDto createUserDto = new CreateUserDto(
                 data.email(),
                 hashedPassword,

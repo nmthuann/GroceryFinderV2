@@ -1,15 +1,9 @@
 package com.nmt.groceryfinderv2.modules.users.dtos;
 
-
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-
-
-import java.io.Serializable;
-
-
 
 public record UserDto(
         String id,
@@ -32,5 +26,5 @@ public record UserDto(
 
         @NotEmpty(message = "Role is required")
         String role
-) implements Serializable {
+) {
 }

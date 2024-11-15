@@ -16,8 +16,6 @@ public record CreateAccountRequestDto(
         String email,
         @NotEmpty String phone,
         @NotEmpty String name,
-        Date birthday,
-        Integer authMethodId,
         Integer roleId
 ) {
 }

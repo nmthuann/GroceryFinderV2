@@ -23,7 +23,11 @@ public class ProductDocument {
     @Id
     private String id;
 
+    @Indexed(unique = true)
     private String slug;
+
+    @Indexed(unique = true)
+    private String barcode;
 
     @Field("product_name")
     @Indexed(unique = true)
@@ -43,8 +47,10 @@ public class ProductDocument {
 
     private String description;
 
+    @Indexed
     private String category;
 
+    @Indexed
     private String brand;
 
     private String currency;

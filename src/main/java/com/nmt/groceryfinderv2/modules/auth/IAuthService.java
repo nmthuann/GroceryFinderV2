@@ -11,8 +11,7 @@ import jakarta.security.auth.message.AuthException;
 public interface IAuthService {
     LoginResponseDto login (LoginRequestDto data) throws AuthException;
     AuthenticationResponseDto logout(String email) throws AuthException;
-    RegisterAdminResponseDto createAccount (CreateAccountRequestDto data)
-            throws AuthException, ModuleException, MessagingException;
+
     AuthenticationResponseDto verifyEmail(VerifyEmailRequestDto data);
     AuthenticationResponseDto changePassword(String email);
     AuthenticationResponseDto forgetPassword(String email);

@@ -77,13 +77,4 @@ public class AuthController {
         AuthenticationResponseDto response = authService.logout(data.email());
         return ResponseEntity.ok(response);
     }
-
-    @LoggingInterceptor
-    @PostMapping("/create-account")
-    public ResponseEntity<?> createAccount(
-            @RequestBody CreateAccountRequestDto data
-    ) throws MessagingException, AuthException, ModuleException {
-        RegisterAdminResponseDto response = authService.createAccount(data);
-        return ResponseEntity.ok(response);
-    }
 }

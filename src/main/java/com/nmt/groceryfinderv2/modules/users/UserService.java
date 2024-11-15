@@ -1,14 +1,12 @@
 package com.nmt.groceryfinderv2.modules.users;
 
 import com.nmt.groceryfinderv2.common.enums.RoleEnum;
-import com.nmt.groceryfinderv2.exceptions.ModuleException;
 import com.nmt.groceryfinderv2.modules.users.dtos.AccountDto;
 import com.nmt.groceryfinderv2.modules.users.dtos.CreateUserDto;
 import com.nmt.groceryfinderv2.modules.users.dtos.UpdateUserDto;
 import com.nmt.groceryfinderv2.modules.users.dtos.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
 
 
@@ -35,7 +33,24 @@ public class UserService implements IUserService {
 
     @Override
     public UserDto createOne(CreateUserDto data) {
-        return null;
+        UserDocument userDocument = new UserDocument();
+        userDocument.setEmail(data.email());
+        userDocument.setName(data.name());
+        userDocument.setPhone(data.phone());
+        userDocument.setPassword(data.hashedPassword());
+        userDocument.setRefreshToken(data.refreshToken());
+        userDocument.setStatus(true);
+        userDocument.setRole(this.getRoleById(data.role()).name());
+        UserDocument userCreated = this.userRepository.save(userDocument);
+        return new UserDto(
+                userCreated.getId(),
+                userCreated.getEmail(),
+                userCreated.getStatus(),
+                userCreated.getName(),
+                userCreated.getPhone(),
+                userCreated.getRefreshToken(),
+                userCreated.getRole()
+        );
     }
 
     @Override
@@ -53,8 +68,7 @@ public class UserService implements IUserService {
                         user.getStatus(),
                         user.getPassword(),
                         user.getRefreshToken(),
-                        user.toString()
+                        user.getRole()
                 ));
     }
-
 }

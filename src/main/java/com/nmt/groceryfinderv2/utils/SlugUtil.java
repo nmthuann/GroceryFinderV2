@@ -38,7 +38,7 @@ public class SlugUtil {
         return slug;
     }
 
-    private static String replaceVietnameseChars(String input) {
+    public static String replaceVietnameseChars(String input) {
         // Thay thế các chữ cái tiếng Việt có dấu thành chữ cái không dấu tương ứng
         input = input.replace("à", "a").replace("á", "a").replace("ạ", "a").replace("ả", "a").replace("ã", "a")
                 .replace("â", "a").replace("ầ", "a").replace("ấ", "a").replace("ậ", "a").replace("ẩ", "a").replace("ẫ", "a")

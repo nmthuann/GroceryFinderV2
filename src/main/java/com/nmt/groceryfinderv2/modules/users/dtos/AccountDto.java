@@ -8,17 +8,22 @@ import jakarta.validation.constraints.Size;
 
 public record AccountDto (
         String id,
+
         @NotBlank(message = "Email is required")
         @Email(message = "Email should be valid")
         @Size(max = 50, message = "Email should not be longer than 50 characters")
         String email,
+
+        @NotNull(message = "name is required")
         String name,
         @NotNull(message = "Status is required")
         Boolean status,
+
         @NotBlank(message = "password is required")
         String password,
 
         @Size(max = 255, message = "Refresh token should not be longer than 255 characters")
         String refreshToken,
-         String role
+
+        String role
 ) {}
