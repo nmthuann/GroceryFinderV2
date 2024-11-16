@@ -1,9 +1,13 @@
 package com.nmt.groceryfinderv2.modules.products;
 
-import com.nmt.groceryfinderv2.modules.products.domain.ProductDocument;
+import com.nmt.groceryfinderv2.exceptions.ModuleException;
+import com.nmt.groceryfinderv2.modules.products.documents.ProductDocument;
 import com.nmt.groceryfinderv2.modules.products.dtos.CreateProductDto;
 import com.nmt.groceryfinderv2.modules.products.dtos.ProductDto;
+import com.nmt.groceryfinderv2.modules.products.dtos.UpdateProductDto;
 import com.nmt.groceryfinderv2.shared.logging.LoggingInterceptor;
+import com.nmt.groceryfinderv2.utils.FileUtil;
+import org.apache.commons.csv.CSVRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -40,6 +45,19 @@ public class ProductController {
         return new ResponseEntity<>(savedProduct, HttpStatus.CREATED);
     }
 
+    @PatchMapping("/{id}")
+    @LoggingInterceptor
+    public ResponseEntity<ProductDto> updateProductPartially(
+            @PathVariable String id,
+            @RequestBody UpdateProductDto productData) {
+        try {
+            ProductDto updatedProduct = this.productService.updateOneById(id, productData);
+            return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
+        } catch (ModuleException e) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+    }
+
     @GetMapping("/{id}")
     @LoggingInterceptor
     public ResponseEntity<ProductDocument> getProductById(@PathVariable String id) {
@@ -60,6 +78,7 @@ public class ProductController {
 
 
     @GetMapping
+    @LoggingInterceptor
     public ResponseEntity<?> getProducts(
             @RequestParam(required = false) String slug,
             @RequestParam(required = false) String barcode,
@@ -110,12 +129,31 @@ public class ProductController {
 
 
     @GetMapping("/check")
+    @LoggingInterceptor
     public ResponseEntity<?> checkProductName(@RequestParam String productName) {
         if (productService.checkProductNameDuplicate(productName)) {
-            // Nếu tên đã tồn tại
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body("Product with this name already exists");
         }
         return ResponseEntity.ok("Product name is available");
+    }
+
+
+    @PostMapping("/upload")
+    @LoggingInterceptor
+    public ResponseEntity<?> uploadCsv(@RequestParam("file")MultipartFile file){
+        try {
+            List<CSVRecord> records = FileUtil.readCsvFile(file);
+            this.productService.importProductsFromCSV(records);
+            return new ResponseEntity<>(
+                    "File uploaded and data saved successfully",
+                    HttpStatus.OK
+            );
+        } catch (Exception e) {
+            return new ResponseEntity<>(
+                    "Failed to process file: " + e.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
+        }
     }
 }

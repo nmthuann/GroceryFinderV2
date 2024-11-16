@@ -1,6 +1,6 @@
 package com.nmt.groceryfinderv2.modules.products.dtos;
 
-import com.nmt.groceryfinderv2.modules.products.domain.Specification;
+import com.nmt.groceryfinderv2.modules.products.documents.Specification;
 
 import java.util.List;
 

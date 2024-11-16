@@ -1,17 +1,23 @@
 package com.nmt.groceryfinderv2.modules.products;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nmt.groceryfinderv2.exceptions.ModuleException;
-import com.nmt.groceryfinderv2.modules.products.domain.ProductDocument;
-import com.nmt.groceryfinderv2.modules.products.domain.Specification;
+import com.nmt.groceryfinderv2.modules.products.documents.ProductDocument;
+import com.nmt.groceryfinderv2.modules.products.documents.Specification;
 import com.nmt.groceryfinderv2.modules.products.dtos.CreateProductDto;
 import com.nmt.groceryfinderv2.modules.products.dtos.ProductDto;
 import com.nmt.groceryfinderv2.modules.products.dtos.UpdateProductDto;
 import com.nmt.groceryfinderv2.utils.SlugUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.csv.CSVRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +27,7 @@ import java.util.Optional;
  * @date 11/13/2024
  */
 @Service
+@Slf4j
 public class ProductService implements IProductService {
 
     private final IProductRepository productRepository;
@@ -106,9 +113,6 @@ public class ProductService implements IProductService {
     }
 
 
-
-
-
     @Override
     public Boolean deleteOneById(String id) {
         if (productRepository.existsById(id)) {
@@ -163,5 +167,43 @@ public class ProductService implements IProductService {
     @Override
     public Boolean checkProductNameDuplicate(String productName) {
         return productRepository.findByProductName(productName).isPresent();
+    }
+
+    @Override
+    public List<ProductDto> importProductsFromCSV(Iterable<CSVRecord> records) {
+        List<ProductDocument> productDocuments = new ArrayList<>();
+        ObjectMapper objectMapper = new ObjectMapper();
+        for (CSVRecord record : records) {
+            try {
+                String specsJson = record.get("specs");
+                List<Specification> specsList = null;
+                if (specsJson != null && !specsJson.isEmpty()) {
+                    specsList = objectMapper.readValue(specsJson, new TypeReference<List<Specification>>(){});
+                }
+                CreateProductDto createProductDto = new CreateProductDto(
+                        record.get("barcode"),
+                        record.get("product_name"),
+                        record.get("product_thumb"),
+                        Double.parseDouble(record.get("display_price")),
+                        Double.parseDouble(record.get("import_price")),
+                        record.get("description"),
+                        record.get("category"),
+                        record.get("brand"),
+                        record.get("currency"),
+                        Integer.parseInt(record.get("stock")),
+                        specsList // Gửi danh sách specs đã chuyển đổi
+                );
+                ProductDocument productDocument = this.productMapper.createDocument(createProductDto);
+                productDocuments.add(productDocument);
+
+            } catch (IOException e) {
+                log.error("Failed to parse specs for product: {}", record.get("product_name"), e);
+            }
+
+        }
+        List<ProductDocument> productDocumentListCreated = this.productRepository.saveAll(productDocuments);
+        return productDocumentListCreated.stream().map(
+                this.productMapper::toDto
+        ).toList();
     }
 }

@@ -1,14 +1,11 @@
-package com.nmt.groceryfinderv2.modules.products.domain;
+package com.nmt.groceryfinderv2.modules.products.documents;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -24,17 +21,17 @@ public class ProductDocument {
     private String id;
 
     @Indexed(unique = true)
-    private String slug;
+    private String barcode;
 
     @Indexed(unique = true)
-    private String barcode;
+    private String slug;// 1
 
     @Field("product_name")
     @Indexed(unique = true)
     private String productName;
 
     @Field("normalized_name")
-    private String normalizedName;
+    private String normalizedName;// 2
 
     @Field("product_thumb")
     private String productThumb;
@@ -45,8 +42,6 @@ public class ProductDocument {
     @Field("import_price")
     private Double importPrice;
 
-    private String description;
-
     @Indexed
     private String category;
 
@@ -55,26 +50,17 @@ public class ProductDocument {
 
     private String currency;
 
-    private Integer sold;
+    private Integer sold; // 3
 
     private Integer stock;
 
-    @Field("view_count")
-    private Integer viewCount = 0;
+    private String description;
 
     @Field("is_active")
-    private Boolean isActive;
+    private Boolean isActive; // 5
+
+    @Field("view_count")
+    private Integer viewCount = 0; // 4
 
     private List<Specification> specs;
-
-    @Field("price_history")
-    private List<PriceHistory> priceHistory;
-
-    @Field("created_at")
-    @CreatedDate
-    private LocalDateTime createdAt;
-
-    @Field("updated_at")
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
 }

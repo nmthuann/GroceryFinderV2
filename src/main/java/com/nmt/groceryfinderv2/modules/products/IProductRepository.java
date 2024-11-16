@@ -1,6 +1,6 @@
 package com.nmt.groceryfinderv2.modules.products;
 
-import com.nmt.groceryfinderv2.modules.products.domain.ProductDocument;
+import com.nmt.groceryfinderv2.modules.products.documents.ProductDocument;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;

@@ -1,14 +1,15 @@
 package com.nmt.groceryfinderv2.utils;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVRecord;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -78,6 +79,26 @@ public class FileUtil {
         if (!file.exists()) {
             writeFile(filePath, header, false);
         }
+    }
+
+
+    public static List<CSVRecord> readCsvFile(MultipartFile file) {
+        List<CSVRecord> records = new ArrayList<>();
+        try {
+            Reader reader =  new InputStreamReader(file.getInputStream());
+            CSVFormat format = CSVFormat.DEFAULT.builder()
+                    .setSkipHeaderRecord(true)
+                    .build();
+            Iterable<CSVRecord> csvRecords = format.parse(reader);
+            for (CSVRecord record : csvRecords) {
+                records.add(record);
+            }
+
+            log.info("CSV file has been successfully read.");
+        }catch (Exception e) {
+            log.error("Failed to read CSV file: {}", e.getMessage());
+        }
+        return records;
     }
 
 }

@@ -1,6 +1,6 @@
 package com.nmt.groceryfinderv2.modules.products;
 
-import com.nmt.groceryfinderv2.modules.products.domain.ProductDocument;
+import com.nmt.groceryfinderv2.modules.products.documents.ProductDocument;
 import com.nmt.groceryfinderv2.modules.products.dtos.CreateProductDto;
 import com.nmt.groceryfinderv2.modules.products.dtos.ProductDto;
 import com.nmt.groceryfinderv2.utils.SlugUtil;
@@ -49,12 +49,11 @@ public class ProductMapper {
         productDocument.setCategory(data.category());
         productDocument.setBrand(data.brand());
         productDocument.setCurrency(data.currency());
-        productDocument.setSold(0);
         productDocument.setStock(data.stock());
+        productDocument.setSold(0);
         productDocument.setViewCount(0);
         productDocument.setIsActive(true);
         productDocument.setSpecs(data.specs());
-        productDocument.setPriceHistory(new ArrayList<>());
         return productDocument;
     }
 }

@@ -1,9 +1,6 @@
 package com.nmt.groceryfinderv2.modules.products.dtos;
 
-import com.nmt.groceryfinderv2.modules.products.domain.Specification;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Field;
+import com.nmt.groceryfinderv2.modules.products.documents.Specification;
 
 import java.util.List;
 

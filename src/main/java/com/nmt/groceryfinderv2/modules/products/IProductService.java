@@ -1,10 +1,11 @@
 package com.nmt.groceryfinderv2.modules.products;
 
 import com.nmt.groceryfinderv2.exceptions.ModuleException;
-import com.nmt.groceryfinderv2.modules.products.domain.ProductDocument;
+import com.nmt.groceryfinderv2.modules.products.documents.ProductDocument;
 import com.nmt.groceryfinderv2.modules.products.dtos.CreateProductDto;
 import com.nmt.groceryfinderv2.modules.products.dtos.ProductDto;
 import com.nmt.groceryfinderv2.modules.products.dtos.UpdateProductDto;
+import org.apache.commons.csv.CSVRecord;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -28,4 +29,5 @@ public interface IProductService {
     List<ProductDto> getProductsByBrand(String brand);
     List<ProductDto> getProductsByCategory(String category);
     Boolean checkProductNameDuplicate(String productName);
+    List<ProductDto> importProductsFromCSV(Iterable<CSVRecord> records);
 }
