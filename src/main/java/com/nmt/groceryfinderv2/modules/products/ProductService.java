@@ -90,10 +90,6 @@ public class ProductService implements IProductService {
             productCreated.setBrand(data.brand());
         }
 
-        if (data.currency() != null) {
-            productCreated.setCurrency(data.currency());
-        }
-
         if (data.stock() != null) {
             productCreated.setStock(data.stock());
         }
@@ -189,9 +185,8 @@ public class ProductService implements IProductService {
                         record.get("description"),
                         record.get("category"),
                         record.get("brand"),
-                        record.get("currency"),
                         Integer.parseInt(record.get("stock")),
-                        specsList // Gửi danh sách specs đã chuyển đổi
+                        specsList
                 );
                 ProductDocument productDocument = this.productMapper.createDocument(createProductDto);
                 productDocuments.add(productDocument);

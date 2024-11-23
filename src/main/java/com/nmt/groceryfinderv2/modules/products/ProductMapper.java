@@ -5,7 +5,6 @@ import com.nmt.groceryfinderv2.modules.products.dtos.CreateProductDto;
 import com.nmt.groceryfinderv2.modules.products.dtos.ProductDto;
 import com.nmt.groceryfinderv2.utils.SlugUtil;
 import org.springframework.stereotype.Component;
-import java.util.ArrayList;
 import java.util.Objects;
 
 /**
@@ -31,7 +30,6 @@ public class ProductMapper {
         target.setProductThumb(source.getProductThumb());
         target.setDisplayPrice(source.getDisplayPrice());
         target.setSold(source.getSold());
-        target.setCurrency(source.getCurrency());
         target.setIsActive(source.getIsActive());
     }
 
@@ -48,7 +46,6 @@ public class ProductMapper {
         productDocument.setDescription(data.description());
         productDocument.setCategory(data.category());
         productDocument.setBrand(data.brand());
-        productDocument.setCurrency(data.currency());
         productDocument.setStock(data.stock());
         productDocument.setSold(0);
         productDocument.setViewCount(0);

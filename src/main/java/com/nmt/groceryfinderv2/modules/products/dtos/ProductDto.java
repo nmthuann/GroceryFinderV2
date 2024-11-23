@@ -18,7 +18,5 @@ public class ProductDto {
     private String productThumb;
     private Double displayPrice;
     private Integer sold;
-    private String currency;
     private Boolean isActive;
-
 }

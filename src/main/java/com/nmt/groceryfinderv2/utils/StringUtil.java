@@ -3,7 +3,6 @@ package com.nmt.groceryfinderv2.utils;
 import java.security.SecureRandom;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 /**
  * @author LENOVO
@@ -13,7 +12,7 @@ import java.util.UUID;
 public class StringUtil {
     private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     private static final int STRING_LENGTH = 8;
-    private static SecureRandom random = new SecureRandom();
+    private static final SecureRandom random = new SecureRandom();
 
     public static String generateUniqueRandomString() {
         Set<Character> usedCharacters = new HashSet<>();
@@ -27,14 +26,5 @@ public class StringUtil {
             }
         }
         return sb.toString();
-    }
-
-    public static boolean isUUID(String str) {
-        try {
-            UUID.fromString(str);
-            return true;
-        } catch (IllegalArgumentException e) {
-            return false;
-        }
     }
 }

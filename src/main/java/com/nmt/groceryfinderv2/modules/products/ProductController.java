@@ -45,11 +45,13 @@ public class ProductController {
         return new ResponseEntity<>(savedProduct, HttpStatus.CREATED);
     }
 
+
     @PatchMapping("/{id}")
     @LoggingInterceptor
     public ResponseEntity<ProductDto> updateProductPartially(
             @PathVariable String id,
-            @RequestBody UpdateProductDto productData) {
+            @RequestBody UpdateProductDto productData
+    ) {
         try {
             ProductDto updatedProduct = this.productService.updateOneById(id, productData);
             return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
@@ -57,6 +59,7 @@ public class ProductController {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }
+
 
     @GetMapping("/{id}")
     @LoggingInterceptor
@@ -66,7 +69,9 @@ public class ProductController {
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
 
+
     @DeleteMapping("/{id}")
+    @LoggingInterceptor
     public ResponseEntity<Boolean> deleteProduct(@PathVariable String id) {
         Boolean isDeleted = productService.deleteOneById(id);
         if (isDeleted) {
@@ -80,14 +85,15 @@ public class ProductController {
     @GetMapping
     @LoggingInterceptor
     public ResponseEntity<?> getProducts(
-            @RequestParam(required = false) String slug,
-            @RequestParam(required = false) String barcode,
-            @RequestParam(required = false) String brand,
-            @RequestParam(required = false) String category,
+            @RequestParam(required = false) String slug, // 1
+            @RequestParam(required = false) String barcode, // 2
+            @RequestParam(required = false) String brand, // 3
+            @RequestParam(required = false) String category, // 4
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false, defaultValue = "true") Boolean isPagination
     ) {
+        // 5 API
         try {
             if (!isPagination) {
                 if (slug != null) {
@@ -127,7 +133,6 @@ public class ProductController {
     }
 
 
-
     @GetMapping("/check")
     @LoggingInterceptor
     public ResponseEntity<?> checkProductName(@RequestParam String productName) {
@@ -141,7 +146,7 @@ public class ProductController {
 
     @PostMapping("/upload")
     @LoggingInterceptor
-    public ResponseEntity<?> uploadCsv(@RequestParam("file")MultipartFile file){
+    public ResponseEntity<?> uploadCsv(@RequestParam("file") MultipartFile file){
         try {
             List<CSVRecord> records = FileUtil.readCsvFile(file);
             this.productService.importProductsFromCSV(records);

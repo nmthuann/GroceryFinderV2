@@ -36,3 +36,5 @@ build/
 #logs
 /logs
 *.log
+
+/src/main/resources/application.yml

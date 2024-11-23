@@ -48,8 +48,6 @@ public class ProductDocument {
     @Indexed
     private String brand;
 
-    private String currency;
-
     private Integer sold; // 3
 
     private Integer stock;

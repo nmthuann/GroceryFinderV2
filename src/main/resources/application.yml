@@ -6,7 +6,7 @@ spring:
     name: GroceryFinderV2
   data:
     mongodb:
-      uri: mongodb://localhost:27017/grocery_finder_db
+      uri: mongodb+srv://thuanminh2001286:thuanminh.2@cluster0.du3of.mongodb.net/grocery_finder_db?retryWrites=true&w=majority&appName=Cluster0
     redis:
       host: localhost
       port: 6379

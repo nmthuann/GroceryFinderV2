@@ -2,7 +2,6 @@ package com.nmt.groceryfinderv2.shared.logging;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
-
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
@@ -36,7 +35,7 @@ public class LoggingAspect {
         long startTime = System.currentTimeMillis();
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String author = "PUBLIC"; // Default value
+        String author = "PUBLIC";
         if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
             author = ((UserDetails) authentication.getPrincipal()).getUsername();
         }
