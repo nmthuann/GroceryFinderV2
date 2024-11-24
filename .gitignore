@@ -37,4 +37,6 @@ build/
 /logs
 *.log
 
-/src/main/resources/application.yml
+/src/main/resources/application.properties
+application.properties
+application.yml
