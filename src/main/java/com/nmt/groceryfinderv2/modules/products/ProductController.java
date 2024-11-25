@@ -40,7 +40,7 @@ public class ProductController {
 
     @PostMapping
     @LoggingInterceptor
-    public ResponseEntity<ProductDto> createProduct(@RequestBody CreateProductDto product) {
+    public ResponseEntity<ProductDto> createOne(@RequestBody CreateProductDto product) throws ModuleException {
         ProductDto savedProduct = this.productService.createOne(product);
         return new ResponseEntity<>(savedProduct, HttpStatus.CREATED);
     }
@@ -48,7 +48,7 @@ public class ProductController {
 
     @PatchMapping("/{id}")
     @LoggingInterceptor
-    public ResponseEntity<ProductDto> updateProductPartially(
+    public ResponseEntity<ProductDto> updateOneById(
             @PathVariable String id,
             @RequestBody UpdateProductDto productData
     ) {
@@ -63,7 +63,7 @@ public class ProductController {
 
     @GetMapping("/{id}")
     @LoggingInterceptor
-    public ResponseEntity<ProductDocument> getProductById(@PathVariable String id) {
+    public ResponseEntity<ProductDocument> getOneById(@PathVariable String id) {
         ProductDocument product = productService.getOneById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
         return new ResponseEntity<>(product, HttpStatus.OK);
@@ -72,7 +72,7 @@ public class ProductController {
 
     @DeleteMapping("/{id}")
     @LoggingInterceptor
-    public ResponseEntity<Boolean> deleteProduct(@PathVariable String id) {
+    public ResponseEntity<Boolean> deleteOneById(@PathVariable String id) {
         Boolean isDeleted = productService.deleteOneById(id);
         if (isDeleted) {
             return new ResponseEntity<>(true, HttpStatus.NO_CONTENT);
@@ -118,8 +118,7 @@ public class ProductController {
                     return new ResponseEntity<>(products, HttpStatus.OK);
                 }
                 else {
-                    List<ProductDto> products = productService.getAll();
-                    return new ResponseEntity<>(products, HttpStatus.OK);
+                    return new ResponseEntity<>("Missing the Request Param", HttpStatus.BAD_REQUEST);
                 }
             }
             else {
@@ -146,19 +145,11 @@ public class ProductController {
 
     @PostMapping("/upload")
     @LoggingInterceptor
-    public ResponseEntity<?> uploadCsv(@RequestParam("file") MultipartFile file){
-        try {
-            List<CSVRecord> records = FileUtil.readCsvFile(file);
-            this.productService.importProductsFromCSV(records);
-            return new ResponseEntity<>(
-                    "File uploaded and data saved successfully",
-                    HttpStatus.OK
-            );
-        } catch (Exception e) {
-            return new ResponseEntity<>(
-                    "Failed to process file: " + e.getMessage(),
-                    HttpStatus.INTERNAL_SERVER_ERROR
-            );
-        }
+    public ResponseEntity<?> uploadCsv(@RequestParam("file") MultipartFile file) throws ModuleException{
+        List<CSVRecord> records = FileUtil.readCsvFile(file);
+        return new ResponseEntity<>(
+            this.productService.importProductsFromCSV(records),
+            HttpStatus.OK
+        );
     }
 }

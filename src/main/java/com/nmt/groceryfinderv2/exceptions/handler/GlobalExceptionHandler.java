@@ -187,13 +187,19 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     ) {
         HttpStatus statusCode = HttpStatus.BAD_REQUEST;
         String path = request.getRequestURI();
-        logger.error("Module Exception on {}: {}", path, ex.getMessage());
+        String requestMethod = request.getMethod();
+        String requestParams = request.getQueryString() != null ? request.getQueryString() : "N/A";
+        String requestHeaders = request.getHeader("User-Agent");
+        String clientIp = request.getRemoteAddr();
+        logger.error("Module Exception on {}: {}. Method: {}. Params: {}. User-Agent: {}. Client IP: {}",
+                path, ex.getMessage(), requestMethod, requestParams, requestHeaders, clientIp, ex);
         RestErrorResponse re = new RestErrorResponse (
                 statusCode.value(),
                 statusCode.getReasonPhrase(),
                 ModuleException.class.getName(),
                 ex.getMessage(),
-                "Module Exception...",
+                "An error occurred while processing your request. " +
+                        "Please check your input data and try again. Invalid Data or Duplicate Entry",
                 LocalDateTime.now(),
                 path
         );

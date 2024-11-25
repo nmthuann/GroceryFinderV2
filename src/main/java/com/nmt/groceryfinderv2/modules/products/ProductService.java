@@ -1,13 +1,12 @@
 package com.nmt.groceryfinderv2.modules.products;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nmt.groceryfinderv2.exceptions.ModuleException;
 import com.nmt.groceryfinderv2.modules.products.documents.ProductDocument;
 import com.nmt.groceryfinderv2.modules.products.documents.Specification;
 import com.nmt.groceryfinderv2.modules.products.dtos.CreateProductDto;
 import com.nmt.groceryfinderv2.modules.products.dtos.ProductDto;
 import com.nmt.groceryfinderv2.modules.products.dtos.UpdateProductDto;
+import com.nmt.groceryfinderv2.utils.JsonUtil;
 import com.nmt.groceryfinderv2.utils.SlugUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVRecord;
@@ -15,8 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -44,7 +43,13 @@ public class ProductService implements IProductService {
 
 
     @Override
-    public ProductDto createOne(CreateProductDto data) {
+    public ProductDto createOne(CreateProductDto data) throws ModuleException {
+        if (this.getOneByBarcode(data.barcode()).isPresent()) {
+            throw new ModuleException("barcode with name '" + data.barcode() + "' already exists.");
+        }if (this.checkProductNameDuplicate(data.productName())) {
+            throw new ModuleException("barcode with name '" + data.productName() + "' already exists.");
+        }
+
         ProductDocument createProduct = this.productMapper.createDocument(data);
         return this.productMapper.toDto(this.productRepository.save(createProduct));
     }
@@ -128,6 +133,7 @@ public class ProductService implements IProductService {
 
     @Override
     public Page<ProductDto> getPaginated(Pageable pageable) {
+        // đọc cache
         return productRepository.findAll(pageable).map(
                 this.productMapper::toDto
         );
@@ -148,6 +154,7 @@ public class ProductService implements IProductService {
 
     @Override
     public List<ProductDto> getProductsByBrand(String brand) {
+        // đọc cache {brand} -> key: products:hảo hảo
         return this.productRepository.findByBrand(brand).stream().map(
                 this.productMapper::toDto
         ).toList();
@@ -155,6 +162,7 @@ public class ProductService implements IProductService {
 
     @Override
     public List<ProductDto> getProductsByCategory(String category) {
+        // đọc cache
         return this.productRepository.findByCategory(category).stream().map(
                 this.productMapper::toDto
         ).toList();
@@ -166,36 +174,48 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public List<ProductDto> importProductsFromCSV(Iterable<CSVRecord> records) {
+    @Transactional
+    public List<ProductDto> importProductsFromCSV(Iterable<CSVRecord> records) throws ModuleException {
         List<ProductDocument> productDocuments = new ArrayList<>();
-        ObjectMapper objectMapper = new ObjectMapper();
         for (CSVRecord record : records) {
-            try {
-                String specsJson = record.get("specs");
-                List<Specification> specsList = null;
-                if (specsJson != null && !specsJson.isEmpty()) {
-                    specsList = objectMapper.readValue(specsJson, new TypeReference<List<Specification>>(){});
-                }
-                CreateProductDto createProductDto = new CreateProductDto(
-                        record.get("barcode"),
-                        record.get("product_name"),
-                        record.get("product_thumb"),
-                        Double.parseDouble(record.get("display_price")),
-                        Double.parseDouble(record.get("import_price")),
-                        record.get("description"),
-                        record.get("category"),
-                        record.get("brand"),
-                        Integer.parseInt(record.get("stock")),
-                        specsList
-                );
-                ProductDocument productDocument = this.productMapper.createDocument(createProductDto);
-                productDocuments.add(productDocument);
+            String barcode = record.get(0).replaceAll("^\"|\"$", "");
+            if (this.getOneByBarcode(barcode).isPresent()) {
+                throw new ModuleException("barcode with name '" + barcode + "' already exists.");
+            }
+            String productName = record.get(1);
+            if (this.checkProductNameDuplicate(productName)) {
+                throw new ModuleException("Product with name '" + productName + "' already exists.");
+            }
+            String productThumb = record.get(2);
+            Double displayPrice = Double.parseDouble(record.get(3));
+            Double importPrice = Double.parseDouble(record.get(4));
+            String description = record.get(5);
+            String category = record.get(6);
+            String brand = record.get(7);
+            Integer stock = Integer.parseInt(record.get(8));
+            String specsJson = record.get(9);
 
-            } catch (IOException e) {
-                log.error("Failed to parse specs for product: {}", record.get("product_name"), e);
+            List<Specification> specsList = null;
+            if (specsJson != null && !specsJson.isEmpty()) {
+                specsList = JsonUtil.parseKeyAndValuePair(specsJson);
             }
 
+            CreateProductDto createProductDto = new CreateProductDto(
+                    barcode,
+                    productName,
+                    productThumb,
+                    displayPrice,
+                    importPrice,
+                    description,
+                    category,
+                    brand,
+                    stock,
+                    specsList
+            );
+            ProductDocument productDocument = this.productMapper.createDocument(createProductDto);
+            productDocuments.add(productDocument);
         }
+
         List<ProductDocument> productDocumentListCreated = this.productRepository.saveAll(productDocuments);
         return productDocumentListCreated.stream().map(
                 this.productMapper::toDto

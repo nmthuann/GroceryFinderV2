@@ -18,7 +18,7 @@ import java.util.Optional;
  * @date 11/14/2024
  */
 public interface IProductService {
-    ProductDto createOne(CreateProductDto data);
+    ProductDto createOne(CreateProductDto data) throws ModuleException;
     ProductDto updateOneById(String id, UpdateProductDto data) throws ModuleException;
     Boolean deleteOneById(String id);
     List<ProductDto> getAll();
@@ -29,5 +29,5 @@ public interface IProductService {
     List<ProductDto> getProductsByBrand(String brand);
     List<ProductDto> getProductsByCategory(String category);
     Boolean checkProductNameDuplicate(String productName);
-    List<ProductDto> importProductsFromCSV(Iterable<CSVRecord> records);
+    List<ProductDto> importProductsFromCSV(Iterable<CSVRecord> records) throws ModuleException;
 }

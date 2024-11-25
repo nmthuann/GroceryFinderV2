@@ -87,6 +87,7 @@ public class FileUtil {
         try {
             Reader reader =  new InputStreamReader(file.getInputStream());
             CSVFormat format = CSVFormat.DEFAULT.builder()
+                    .setHeader()
                     .setSkipHeaderRecord(true)
                     .build();
             Iterable<CSVRecord> csvRecords = format.parse(reader);
