@@ -26,7 +26,6 @@ public interface IProductService {
     Optional<ProductDocument> getOneById(String id);
     Optional<ProductDocument> getOneBySlug(String slug);
     Optional<ProductDocument> getOneByBarcode(String barcode);
-    List<ProductDto> getProductsByBrand(String brand);
     List<ProductDto> getProductsByCategory(String category);
     Boolean checkProductNameDuplicate(String productName);
     List<ProductDto> importProductsFromCSV(Iterable<CSVRecord> records) throws ModuleException;

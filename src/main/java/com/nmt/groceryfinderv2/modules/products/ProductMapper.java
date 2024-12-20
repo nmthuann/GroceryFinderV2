@@ -45,7 +45,6 @@ public class ProductMapper {
         productDocument.setImportPrice(data.importPrice());
         productDocument.setDescription(data.description());
         productDocument.setCategory(data.category());
-        productDocument.setBrand(data.brand());
         productDocument.setStock(data.stock());
         productDocument.setSold(0);
         productDocument.setViewCount(0);

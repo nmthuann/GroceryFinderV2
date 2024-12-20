@@ -19,7 +19,6 @@ public interface IProductRepository extends MongoRepository<ProductDocument, Str
     Page<ProductDocument> findAll(Pageable pageable);
     Optional<ProductDocument> findBySlug(String slug);
     Optional<ProductDocument> findByBarcode(String barcode);
-    List<ProductDocument> findByBrand(String brand);
     List<ProductDocument> findByCategory(String category);
     Optional<ProductDocument> findByProductName(String productName);
 }

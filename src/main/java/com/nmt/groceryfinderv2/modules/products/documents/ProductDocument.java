@@ -24,14 +24,20 @@ public class ProductDocument {
     private String barcode;
 
     @Indexed(unique = true)
-    private String slug;// 1
+    private String slug;
 
     @Field("product_name")
     @Indexed(unique = true)
     private String productName;
 
     @Field("normalized_name")
-    private String normalizedName;// 2
+    private String normalizedName;
+
+    @Indexed
+    private String category;
+
+    @Field("category_url")
+    private String categoryUrl;
 
     @Field("product_thumb")
     private String productThumb;
@@ -42,23 +48,19 @@ public class ProductDocument {
     @Field("import_price")
     private Double importPrice;
 
-    @Indexed
-    private String category;
-
-    @Indexed
-    private String brand;
-
-    private Integer sold; // 3
+    private Integer sold;
 
     private Integer stock;
+
+    private Integer like;
 
     private String description;
 
     @Field("is_active")
-    private Boolean isActive; // 5
+    private Boolean isActive;
 
     @Field("view_count")
-    private Integer viewCount = 0; // 4
+    private Integer viewCount = 0;
 
     private List<Specification> specs;
 }

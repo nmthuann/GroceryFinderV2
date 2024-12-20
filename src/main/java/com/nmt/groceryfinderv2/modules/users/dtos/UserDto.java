@@ -14,7 +14,6 @@ public record UserDto(
 
         @NotEmpty(message = "Status is required")
         Boolean status,
-
         @NotEmpty
         String name,
 

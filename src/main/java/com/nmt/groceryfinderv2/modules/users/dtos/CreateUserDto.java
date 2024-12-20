@@ -2,7 +2,6 @@ package com.nmt.groceryfinderv2.modules.users.dtos;
 
 import jakarta.validation.constraints.*;
 
-
 /**
  * @author LENOVO
  * @project ecommerce-spring-boot-be

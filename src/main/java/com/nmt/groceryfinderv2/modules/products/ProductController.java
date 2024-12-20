@@ -87,7 +87,6 @@ public class ProductController {
     public ResponseEntity<?> getProducts(
             @RequestParam(required = false) String slug, // 1
             @RequestParam(required = false) String barcode, // 2
-            @RequestParam(required = false) String brand, // 3
             @RequestParam(required = false) String category, // 4
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -110,9 +109,6 @@ public class ProductController {
                     } else {
                         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                     }
-                } else if (brand != null) {
-                    List<ProductDto> products = productService.getProductsByBrand(brand);
-                    return new ResponseEntity<>(products, HttpStatus.OK);
                 } else if (category != null) {
                     List<ProductDto> products = productService.getProductsByCategory(category);
                     return new ResponseEntity<>(products, HttpStatus.OK);
