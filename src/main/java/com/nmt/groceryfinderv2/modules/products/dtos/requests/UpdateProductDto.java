@@ -1,4 +1,4 @@
-package com.nmt.groceryfinderv2.modules.products.dtos;
+package com.nmt.groceryfinderv2.modules.products.dtos.requests;
 
 import com.nmt.groceryfinderv2.modules.products.documents.Specification;
 import jakarta.validation.constraints.*;

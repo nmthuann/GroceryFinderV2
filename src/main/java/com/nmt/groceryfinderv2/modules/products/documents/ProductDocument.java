@@ -42,11 +42,11 @@ public class ProductDocument {
     @Field("product_thumb")
     private String productThumb;
 
-    @Field("display_price")
-    private Double displayPrice;
+    @Field("latest_price")
+    private Double latestPrice;
 
-    @Field("import_price")
-    private Double importPrice;
+    @Field("old_price")
+    private Double oldPrice;
 
     private Integer sold;
 
@@ -55,6 +55,8 @@ public class ProductDocument {
     private Integer like;
 
     private String description;
+
+    private String unit;
 
     @Field("is_active")
     private Boolean isActive;

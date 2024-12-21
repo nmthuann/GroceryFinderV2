@@ -1,7 +1,5 @@
 package com.nmt.groceryfinderv2.modules.products.dtos.responses;
 
-import java.util.UUID;
-
 /**
  * @author LENOVO
  * @project GroceryFinder
@@ -11,12 +9,14 @@ public record ProductCardResponse(
         Integer id,
         String slug,
         String productName,
-        String image,
-        Boolean status,
+        String productThumb,
+        String category,
+        String categoryUrl,
+        Boolean isActive,
         Integer sold,
         Integer currentStock,
         Double latestPrice,
         Double oldPrice,
-        String unit
+        Integer like
 ) {
 }

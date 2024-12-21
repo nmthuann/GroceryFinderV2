@@ -16,7 +16,7 @@ public class ProductDto {
     private String barcode;
     private String productName;
     private String productThumb;
-    private Double displayPrice;
+    private Double latestPrice;
     private Integer sold;
     private Boolean isActive;
 }

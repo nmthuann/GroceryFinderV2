@@ -2,9 +2,9 @@ package com.nmt.groceryfinderv2.modules.products;
 
 import com.nmt.groceryfinderv2.exceptions.ModuleException;
 import com.nmt.groceryfinderv2.modules.products.documents.ProductDocument;
-import com.nmt.groceryfinderv2.modules.products.dtos.CreateProductDto;
+import com.nmt.groceryfinderv2.modules.products.dtos.requests.CreateProductDto;
 import com.nmt.groceryfinderv2.modules.products.dtos.ProductDto;
-import com.nmt.groceryfinderv2.modules.products.dtos.UpdateProductDto;
+import com.nmt.groceryfinderv2.modules.products.dtos.requests.UpdateProductDto;
 import org.apache.commons.csv.CSVRecord;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

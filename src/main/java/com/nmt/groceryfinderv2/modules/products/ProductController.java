@@ -2,9 +2,9 @@ package com.nmt.groceryfinderv2.modules.products;
 
 import com.nmt.groceryfinderv2.exceptions.ModuleException;
 import com.nmt.groceryfinderv2.modules.products.documents.ProductDocument;
-import com.nmt.groceryfinderv2.modules.products.dtos.CreateProductDto;
+import com.nmt.groceryfinderv2.modules.products.dtos.requests.CreateProductDto;
 import com.nmt.groceryfinderv2.modules.products.dtos.ProductDto;
-import com.nmt.groceryfinderv2.modules.products.dtos.UpdateProductDto;
+import com.nmt.groceryfinderv2.modules.products.dtos.requests.UpdateProductDto;
 import com.nmt.groceryfinderv2.shared.logging.LoggingInterceptor;
 import com.nmt.groceryfinderv2.utils.FileUtil;
 import org.apache.commons.csv.CSVRecord;

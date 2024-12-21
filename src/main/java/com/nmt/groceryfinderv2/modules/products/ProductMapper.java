@@ -1,7 +1,7 @@
 package com.nmt.groceryfinderv2.modules.products;
 
 import com.nmt.groceryfinderv2.modules.products.documents.ProductDocument;
-import com.nmt.groceryfinderv2.modules.products.dtos.CreateProductDto;
+import com.nmt.groceryfinderv2.modules.products.dtos.requests.CreateProductDto;
 import com.nmt.groceryfinderv2.modules.products.dtos.ProductDto;
 import com.nmt.groceryfinderv2.utils.SlugUtil;
 import org.springframework.stereotype.Component;
@@ -28,7 +28,7 @@ public class ProductMapper {
         target.setBarcode(source.getBarcode());
         target.setProductName(source.getProductName());
         target.setProductThumb(source.getProductThumb());
-        target.setDisplayPrice(source.getDisplayPrice());
+        target.setDisplayPrice(source.getLatestPrice());
         target.setSold(source.getSold());
         target.setIsActive(source.getIsActive());
     }
@@ -41,12 +41,14 @@ public class ProductMapper {
         productDocument.setProductName(data.productName());
         productDocument.setNormalizedName(SlugUtil.replaceVietnameseChars(data.productName()));
         productDocument.setProductThumb(data.productThumb());
-        productDocument.setDisplayPrice(data.displayPrice());
-        productDocument.setImportPrice(data.importPrice());
+        productDocument.setLatestPrice(data.latestPrice());
+        productDocument.setOldPrice(data.oldPrice());
         productDocument.setDescription(data.description());
         productDocument.setCategory(data.category());
+        productDocument.setCategoryUrl(SlugUtil.createSlug(data.category()));
         productDocument.setStock(data.stock());
         productDocument.setSold(0);
+        productDocument.setLike(0);
         productDocument.setViewCount(0);
         productDocument.setIsActive(true);
         productDocument.setSpecs(data.specs());
