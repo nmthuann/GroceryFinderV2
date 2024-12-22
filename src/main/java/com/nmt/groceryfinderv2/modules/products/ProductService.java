@@ -75,12 +75,12 @@ public class ProductService implements IProductService {
             productCreated.setProductThumb(data.productThumb());
         }
 
-        if (data.displayPrice() != null) {
-            productCreated.setDisplayPrice(data.displayPrice());
+        if (data.latestPrice() != null) {
+            productCreated.setLatestPrice(data.latestPrice());
         }
 
-        if (data.importPrice() != null) {
-            productCreated.setImportPrice(data.importPrice());
+        if (data.oldPrice() != null) {
+            productCreated.setOldPrice(data.oldPrice());
         }
 
         if (data.description() != null) {
@@ -89,10 +89,6 @@ public class ProductService implements IProductService {
 
         if (data.category() != null) {
             productCreated.setCategory(data.category());
-        }
-
-        if (data.brand() != null) {
-            productCreated.setBrand(data.brand());
         }
 
         if (data.stock() != null) {
@@ -123,13 +119,6 @@ public class ProductService implements IProductService {
         return false;
     }
 
-    @Override
-    public List<ProductDto> getAll() {
-        return productRepository.findAll()
-                .stream()
-                .map(this.productMapper::toDto)
-                .toList();
-    }
 
     @Override
     public Page<ProductDto> getPaginated(Pageable pageable) {
@@ -150,14 +139,6 @@ public class ProductService implements IProductService {
     @Override
     public Optional<ProductDocument> getOneByBarcode(String barcode) {
         return productRepository.findByBarcode(barcode);
-    }
-
-    @Override
-    public List<ProductDto> getProductsByBrand(String brand) {
-        // đọc cache {brand} -> key: products:hảo hảo
-        return this.productRepository.findByBrand(brand).stream().map(
-                this.productMapper::toDto
-        ).toList();
     }
 
     @Override

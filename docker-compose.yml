@@ -1,0 +1,80 @@
+version: '3.8'
+
+networks:
+  bridge-net:
+    driver: bridge
+
+services:
+  postgresql-db:
+    container_name: postgresql-db-container
+    image: debezium/postgres:16-alpine
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: grocery
+    volumes:
+      - grocery-finder-postgresql-db:/var/lib/postgresql/data
+    networks:
+      - bridge-net
+
+  redis:
+    container_name: redis-container
+    image: redis:7.4.0-alpine
+    ports:
+      - "6379:6379"
+    restart: always
+    volumes:
+      - redis-data:/data
+    networks:
+      - bridge-net
+
+  grocery-finder-spring-boot:
+    container_name: grocery-finder-spring-boot-container
+    image: grocery-finder-spring-boot:1.0
+    ports:
+      - "3333:3333"
+    depends_on:
+      - postgresql-db
+    build:
+      context: ..
+      dockerfile: ../Dockerfile
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql-db:5432/grocery?autoReconnect=true&allowPublicKeyRetrieval=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 123456
+      SPRING_DATASOURCE_DRIVER-CLASS-NAME: org.postgresql.Driver
+    networks:
+      - bridge-net
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.24
+    environment:
+      discovery.type: single-node
+      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+    ports:
+      - "9200:9200"
+    volumes:
+      - es-data:/usr/share/elasticsearch/data
+    networks:
+      - bridge-net
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.17.24
+    ports:
+      - "5601:5601"
+    environment:
+      ELASTICSEARCH_HOSTS: "http://elasticsearch:9200"
+    depends_on:
+      - elasticsearch
+    networks:
+      - bridge-net
+
+volumes:
+  grocery-finder-postgresql-db:
+  redis-data:
+  es-data:
+
+# $ curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" localhost:8083/connectors/ -d @register-postgres.json

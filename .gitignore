@@ -28,15 +28,10 @@ target/
 build/
 !**/src/main/**/build/
 !**/src/test/**/build/
-
 ### VS Code ###
 .vscode/
-
+/src/main/resources/application-example.yml
 
 #logs
 /logs
 *.log
-
-
-.src/main/resources/
-src/main/resources/application.properties

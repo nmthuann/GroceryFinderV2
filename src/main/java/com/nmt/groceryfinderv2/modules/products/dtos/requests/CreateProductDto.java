@@ -27,6 +27,7 @@ public record CreateProductDto(
         String description,
         @NotEmpty
         String category,
+        String unit,
         @PositiveOrZero(message = "Stock must be zero or greater")
         Integer stock,
         List<Specification> specs

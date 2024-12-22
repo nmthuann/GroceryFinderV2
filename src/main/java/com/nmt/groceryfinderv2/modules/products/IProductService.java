@@ -21,7 +21,6 @@ public interface IProductService {
     ProductDto createOne(CreateProductDto data) throws ModuleException;
     ProductDto updateOneById(String id, UpdateProductDto data) throws ModuleException;
     Boolean deleteOneById(String id);
-    List<ProductDto> getAll();
     Page<ProductDto> getPaginated(Pageable pageable);
     Optional<ProductDocument> getOneById(String id);
     Optional<ProductDocument> getOneBySlug(String slug);
