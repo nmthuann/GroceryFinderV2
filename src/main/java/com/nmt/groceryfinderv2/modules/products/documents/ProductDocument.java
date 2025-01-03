@@ -21,48 +21,48 @@ public class ProductDocument {
     private String id;
 
     @Indexed(unique = true)
-    private String barcode;
+    private String barcode; // 1
+
+    @Field("product_name")
+    @Indexed(unique = true)
+    private String productName; // 2
+
+    @Indexed
+    private String category; // 3
+
+    @Field("product_thumb")
+    private String productThumb; // 4
+
+    @Field("selling_price")
+    private Double sellingPrice; // 5
+
+    @Field("import_price")
+    private Double importPrice; // 6
+
+    private Integer sold;  // 7
+
+    private Integer stock; // 8
+
+    private String unit; // 9
+
+    private String description; // 10
 
     @Indexed(unique = true)
     private String slug;
 
-    @Field("product_name")
-    @Indexed(unique = true)
-    private String productName;
-
     @Field("normalized_name")
     private String normalizedName;
 
-    @Indexed
-    private String category;
-
     @Field("category_url")
     private String categoryUrl;
-
-    @Field("product_thumb")
-    private String productThumb;
-
-    @Field("latest_price")
-    private Double latestPrice;
-
-    @Field("old_price")
-    private Double oldPrice;
-
-    private Integer sold;
-
-    private Integer stock;
-
-    private Integer like;
-
-    private String description;
-
-    private String unit;
 
     @Field("is_active")
     private Boolean isActive;
 
     @Field("view_count")
     private Integer viewCount = 0;
+
+    private Integer like;
 
     private List<Specification> specs;
 }

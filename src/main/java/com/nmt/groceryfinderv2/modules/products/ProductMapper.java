@@ -28,7 +28,7 @@ public class ProductMapper {
         target.setBarcode(source.getBarcode());
         target.setProductName(source.getProductName());
         target.setProductThumb(source.getProductThumb());
-        target.setDisplayPrice(source.getLatestPrice());
+        target.setSellingPrice(source.getSellingPrice());
         target.setSold(source.getSold());
         target.setIsActive(source.getIsActive());
     }
@@ -41,10 +41,11 @@ public class ProductMapper {
         productDocument.setProductName(data.productName());
         productDocument.setNormalizedName(SlugUtil.replaceVietnameseChars(data.productName()));
         productDocument.setProductThumb(data.productThumb());
-        productDocument.setLatestPrice(data.latestPrice());
-        productDocument.setOldPrice(data.oldPrice());
+        productDocument.setSellingPrice(data.sellingPrice());
+        productDocument.setImportPrice(data.importPrice());
         productDocument.setDescription(data.description());
         productDocument.setCategory(data.category());
+        productDocument.setUnit(data.unit());
         productDocument.setCategoryUrl(SlugUtil.createSlug(data.category()));
         productDocument.setStock(data.stock());
         productDocument.setSold(0);

@@ -19,14 +19,16 @@ public record CreateProductDto(
         String productName,
         @URL
         String productThumb,
-        @NotNull(message = "Display price is required")
-        @PositiveOrZero(message = "Display Price must be zero or greater")
-        Double latestPrice,
+        @NotNull(message = "Selling price is required")
+        @PositiveOrZero(message = "Selling Price must be zero or greater")
+        Double sellingPrice,
         @PositiveOrZero(message = "Import price must be zero or greater")
-        Double oldPrice,
+        Double importPrice,
+        @NotEmpty
         String description,
         @NotEmpty
         String category,
+        @NotEmpty
         String unit,
         @PositiveOrZero(message = "Stock must be zero or greater")
         Integer stock,

@@ -18,14 +18,14 @@ import java.util.Optional;
  * @date 11/14/2024
  */
 public interface IProductService {
-    ProductDto createOne(CreateProductDto data) throws ModuleException;
-    ProductDto updateOneById(String id, UpdateProductDto data) throws ModuleException;
-    Boolean deleteOneById(String id);
-    Page<ProductDto> getPaginated(Pageable pageable);
     Optional<ProductDocument> getOneById(String id);
     Optional<ProductDocument> getOneBySlug(String slug);
     Optional<ProductDocument> getOneByBarcode(String barcode);
     List<ProductDto> getProductsByCategory(String category);
+    Page<ProductDto> getPaginated(Pageable pageable);
+    ProductDto createOne(CreateProductDto data) throws ModuleException;
+    ProductDto updateOneById(String id, UpdateProductDto data) throws ModuleException;
+    Boolean deleteOneById(String id);
     Boolean checkProductNameDuplicate(String productName);
     List<ProductDto> importProductsFromCSV(Iterable<CSVRecord> records) throws ModuleException;
 }

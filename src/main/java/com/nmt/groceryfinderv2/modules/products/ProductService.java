@@ -1,6 +1,7 @@
 package com.nmt.groceryfinderv2.modules.products;
 
 import com.nmt.groceryfinderv2.exceptions.ModuleException;
+import com.nmt.groceryfinderv2.exceptions.messages.ProductsModuleExceptionMessages;
 import com.nmt.groceryfinderv2.modules.products.documents.ProductDocument;
 import com.nmt.groceryfinderv2.modules.products.documents.Specification;
 import com.nmt.groceryfinderv2.modules.products.dtos.requests.CreateProductDto;
@@ -43,13 +44,29 @@ public class ProductService implements IProductService {
 
 
     @Override
+    public  Optional<ProductDocument> getOneById(String id) {
+        return productRepository.findById(id);
+    }
+    @Override
+    public Optional<ProductDocument> getOneBySlug(String slug) {
+        return productRepository.findBySlug(slug);
+    }
+    @Override
+    public Optional<ProductDocument> getOneByBarcode(String barcode) {
+        return productRepository.findByBarcode(barcode);
+    }
+
+    @Override
     public ProductDto createOne(CreateProductDto data) throws ModuleException {
         if (this.getOneByBarcode(data.barcode()).isPresent()) {
-            throw new ModuleException("barcode with name '" + data.barcode() + "' already exists.");
+            throw new ModuleException(
+                    ProductsModuleExceptionMessages.GET_PRODUCT_BARCODE_ALREADY_EXISTS.getMessage()
+            );
         }if (this.checkProductNameDuplicate(data.productName())) {
-            throw new ModuleException("barcode with name '" + data.productName() + "' already exists.");
+            throw new ModuleException(
+                    ProductsModuleExceptionMessages.GET_PRODUCT_NAME_ALREADY_EXISTS.getMessage()
+            );
         }
-
         ProductDocument createProduct = this.productMapper.createDocument(data);
         return this.productMapper.toDto(this.productRepository.save(createProduct));
     }
@@ -58,12 +75,14 @@ public class ProductService implements IProductService {
     public ProductDto updateOneById(String id, UpdateProductDto data) throws ModuleException {
         Optional<ProductDocument> productOpt = productRepository.findById(id);
         if (productOpt.isEmpty()) {
-            throw new ModuleException("Product with id " + id + " not found.");
+            throw new ModuleException(
+                    ProductsModuleExceptionMessages.GET_PRODUCT_ID_NOT_FOUND.getMessage() + "ID: " +id
+            );
         }
         ProductDocument productCreated = productOpt.get();
         if (data.productName() != null) {
-            productCreated.setSlug(SlugUtil.createSlug(data.productName()));  // Cập nhật slug
-            productCreated.setNormalizedName(SlugUtil.replaceVietnameseChars(data.productName()));  // Cập nhật tên chuẩn hóa
+            productCreated.setSlug(SlugUtil.createSlug(data.productName()));
+            productCreated.setNormalizedName(SlugUtil.replaceVietnameseChars(data.productName()));
             productCreated.setProductName(data.productName());
         }
 
@@ -75,12 +94,12 @@ public class ProductService implements IProductService {
             productCreated.setProductThumb(data.productThumb());
         }
 
-        if (data.latestPrice() != null) {
-            productCreated.setLatestPrice(data.latestPrice());
+        if (data.sellingPrice() != null) {
+            productCreated.setSellingPrice(data.sellingPrice());
         }
 
-        if (data.oldPrice() != null) {
-            productCreated.setOldPrice(data.oldPrice());
+        if (data.importPrice() != null) {
+            productCreated.setImportPrice(data.importPrice());
         }
 
         if (data.description() != null) {
@@ -128,18 +147,7 @@ public class ProductService implements IProductService {
         );
     }
 
-    @Override
-    public  Optional<ProductDocument> getOneById(String id) {
-        return productRepository.findById(id);
-    }
-    @Override
-    public Optional<ProductDocument> getOneBySlug(String slug) {
-        return productRepository.findBySlug(slug);
-    }
-    @Override
-    public Optional<ProductDocument> getOneByBarcode(String barcode) {
-        return productRepository.findByBarcode(barcode);
-    }
+
 
     @Override
     public List<ProductDto> getProductsByCategory(String category) {

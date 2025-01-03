@@ -1,6 +1,7 @@
 package com.nmt.groceryfinderv2.modules.products;
 
 import com.nmt.groceryfinderv2.exceptions.ModuleException;
+import com.nmt.groceryfinderv2.exceptions.messages.ServerExceptionMessage;
 import com.nmt.groceryfinderv2.modules.products.documents.ProductDocument;
 import com.nmt.groceryfinderv2.modules.products.dtos.requests.CreateProductDto;
 import com.nmt.groceryfinderv2.modules.products.dtos.ProductDto;
@@ -87,12 +88,12 @@ public class ProductController {
     public ResponseEntity<?> getProducts(
             @RequestParam(required = false) String slug, // 1
             @RequestParam(required = false) String barcode, // 2
-            @RequestParam(required = false) String category, // 4
+            @RequestParam(required = false) String category, // 3
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false, defaultValue = "true") Boolean isPagination
     ) {
-        // 5 API
+
         try {
             if (!isPagination) {
                 if (slug != null) {
@@ -114,7 +115,10 @@ public class ProductController {
                     return new ResponseEntity<>(products, HttpStatus.OK);
                 }
                 else {
-                    return new ResponseEntity<>("Missing the Request Param", HttpStatus.BAD_REQUEST);
+                    return new ResponseEntity<>(
+                            ServerExceptionMessage.MISSING_REQUEST_PARAMETER.getMessage(),
+                            HttpStatus.BAD_REQUEST
+                    );
                 }
             }
             else {
