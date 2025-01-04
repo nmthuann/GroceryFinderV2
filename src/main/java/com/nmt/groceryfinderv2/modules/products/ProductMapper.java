@@ -5,6 +5,8 @@ import com.nmt.groceryfinderv2.modules.products.dtos.requests.CreateProductDto;
 import com.nmt.groceryfinderv2.modules.products.dtos.ProductDto;
 import com.nmt.groceryfinderv2.utils.SlugUtil;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
 import java.util.Objects;
 
 /**
@@ -28,7 +30,7 @@ public class ProductMapper {
         target.setBarcode(source.getBarcode());
         target.setProductName(source.getProductName());
         target.setProductThumb(source.getProductThumb());
-        target.setSellingPrice(source.getSellingPrice());
+        target.setSalePrice(source.getSalePrice());
         target.setSold(source.getSold());
         target.setIsActive(source.getIsActive());
     }
@@ -41,18 +43,18 @@ public class ProductMapper {
         productDocument.setProductName(data.productName());
         productDocument.setNormalizedName(SlugUtil.replaceVietnameseChars(data.productName()));
         productDocument.setProductThumb(data.productThumb());
-        productDocument.setSellingPrice(data.sellingPrice());
+        productDocument.setSalePrice(data.salePrice());
         productDocument.setImportPrice(data.importPrice());
         productDocument.setDescription(data.description());
         productDocument.setCategory(data.category());
         productDocument.setUnit(data.unit());
         productDocument.setCategoryUrl(SlugUtil.createSlug(data.category()));
         productDocument.setStock(data.stock());
-        productDocument.setSold(0);
-        productDocument.setLike(0);
+        productDocument.setSold(200);
+        productDocument.setLike(10);
         productDocument.setViewCount(0);
         productDocument.setIsActive(true);
-        productDocument.setSpecs(data.specs());
+        productDocument.setSpecs(new ArrayList<>());
         return productDocument;
     }
 }

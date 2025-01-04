@@ -19,9 +19,9 @@ public record UpdateProductDto(
         String productName,
         @URL
         String productThumb,
-        @NotNull(message = "Selling price is required")
-        @PositiveOrZero(message = "Selling Price Price must be zero or greater")
-        Double sellingPrice,
+        @NotNull(message = "Sale price is required")
+        @PositiveOrZero(message = "Sale Price Price must be zero or greater")
+        Double salePrice,
         @NotNull(message = "Import price is required")
         @PositiveOrZero(message = "Import Price must be zero or greater")
         Double importPrice,

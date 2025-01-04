@@ -33,8 +33,8 @@ public class ProductDocument {
     @Field("product_thumb")
     private String productThumb; // 4
 
-    @Field("selling_price")
-    private Double sellingPrice; // 5
+    @Field("sale_price")
+    private Double salePrice; // 5
 
     @Field("import_price")
     private Double importPrice; // 6

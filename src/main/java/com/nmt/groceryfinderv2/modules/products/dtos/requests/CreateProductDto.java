@@ -12,7 +12,7 @@ import java.util.List;
  */
 public record CreateProductDto(
         @NotBlank(message = "Barcode is required")
-        @Size(max = 20, message = "Barcode cannot exceed 20 characters")
+        @Size(max = 20, message = "Barcode cannot exceed  characters")
         String barcode,
         @Size(max = 100, message = "Product name too long")
         @NotEmpty
@@ -21,7 +21,7 @@ public record CreateProductDto(
         String productThumb,
         @NotNull(message = "Selling price is required")
         @PositiveOrZero(message = "Selling Price must be zero or greater")
-        Double sellingPrice,
+        Double salePrice,
         @PositiveOrZero(message = "Import price must be zero or greater")
         Double importPrice,
         @NotEmpty
@@ -31,7 +31,6 @@ public record CreateProductDto(
         @NotEmpty
         String unit,
         @PositiveOrZero(message = "Stock must be zero or greater")
-        Integer stock,
-        List<Specification> specs
+        Integer stock
 ) {
 }

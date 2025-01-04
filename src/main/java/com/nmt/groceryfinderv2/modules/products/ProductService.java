@@ -3,11 +3,9 @@ package com.nmt.groceryfinderv2.modules.products;
 import com.nmt.groceryfinderv2.exceptions.ModuleException;
 import com.nmt.groceryfinderv2.exceptions.messages.ProductsModuleExceptionMessages;
 import com.nmt.groceryfinderv2.modules.products.documents.ProductDocument;
-import com.nmt.groceryfinderv2.modules.products.documents.Specification;
 import com.nmt.groceryfinderv2.modules.products.dtos.requests.CreateProductDto;
 import com.nmt.groceryfinderv2.modules.products.dtos.ProductDto;
 import com.nmt.groceryfinderv2.modules.products.dtos.requests.UpdateProductDto;
-import com.nmt.groceryfinderv2.utils.JsonUtil;
 import com.nmt.groceryfinderv2.utils.SlugUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVRecord;
@@ -94,8 +92,8 @@ public class ProductService implements IProductService {
             productCreated.setProductThumb(data.productThumb());
         }
 
-        if (data.sellingPrice() != null) {
-            productCreated.setSellingPrice(data.sellingPrice());
+        if (data.salePrice() != null) {
+            productCreated.setSalePrice(data.salePrice());
         }
 
         if (data.importPrice() != null) {
@@ -182,12 +180,6 @@ public class ProductService implements IProductService {
             String category = record.get(6);
             String brand = record.get(7);
             Integer stock = Integer.parseInt(record.get(8));
-            String specsJson = record.get(9);
-
-            List<Specification> specsList = null;
-            if (specsJson != null && !specsJson.isEmpty()) {
-                specsList = JsonUtil.parseKeyAndValuePair(specsJson);
-            }
 
             CreateProductDto createProductDto = new CreateProductDto(
                     barcode,
@@ -198,8 +190,8 @@ public class ProductService implements IProductService {
                     description,
                     category,
                     brand,
-                    stock,
-                    specsList
+                    stock
+
             );
             ProductDocument productDocument = this.productMapper.createDocument(createProductDto);
             productDocuments.add(productDocument);
