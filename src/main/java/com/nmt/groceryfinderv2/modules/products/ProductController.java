@@ -41,13 +41,15 @@ public class ProductController {
 
     @PostMapping
     @LoggingInterceptor
-    public ResponseEntity<ProductDto> createOne(@RequestBody CreateProductDto product) throws ModuleException {
+    public ResponseEntity<ProductDto> createOne(
+            @RequestBody CreateProductDto product
+    ) throws ModuleException {
         ProductDto savedProduct = this.productService.createOne(product);
         return new ResponseEntity<>(savedProduct, HttpStatus.CREATED);
     }
 
 
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     @LoggingInterceptor
     public ResponseEntity<ProductDto> updateOneById(
             @PathVariable String id,

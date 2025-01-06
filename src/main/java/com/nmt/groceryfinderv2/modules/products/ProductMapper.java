@@ -3,10 +3,12 @@ package com.nmt.groceryfinderv2.modules.products;
 import com.nmt.groceryfinderv2.modules.products.documents.ProductDocument;
 import com.nmt.groceryfinderv2.modules.products.dtos.requests.CreateProductDto;
 import com.nmt.groceryfinderv2.modules.products.dtos.ProductDto;
+import com.nmt.groceryfinderv2.modules.products.dtos.requests.UpdateProductDto;
 import com.nmt.groceryfinderv2.utils.SlugUtil;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 
 /**
@@ -35,6 +37,7 @@ public class ProductMapper {
         target.setIsActive(source.getIsActive());
     }
 
+
     public ProductDocument createDocument (CreateProductDto data) {
         Objects.requireNonNull(data, "CreateProductDto must not be null");
         ProductDocument productDocument = new ProductDocument();
@@ -55,6 +58,28 @@ public class ProductMapper {
         productDocument.setViewCount(0);
         productDocument.setIsActive(true);
         productDocument.setSpecs(new ArrayList<>());
+        productDocument.setPriceHistory(new ArrayList<>());
+        productDocument.setReviews(new ArrayList<>());
+        productDocument.setMetadata(new HashMap<>());
         return productDocument;
+    }
+
+    public ProductDocument updateDocument(UpdateProductDto data, ProductDocument productCreated){
+        Objects.requireNonNull(data, "UpdateProductDto must not be null");
+        Objects.requireNonNull(productCreated, "Existing ProductDocument must not be null");
+
+        productCreated.setBarcode(data.barcode());
+        productCreated.setProductName(data.productName());
+        productCreated.setProductThumb(data.productThumb());
+        productCreated.setSalePrice(data.salePrice());
+        productCreated.setImportPrice(data.importPrice());
+        productCreated.setDescription(data.description());
+        productCreated.setCategory(data.category());
+        productCreated.setUnit(data.unit());
+        productCreated.setStock(data.stock());
+        productCreated.setSold(data.sold());
+        productCreated.setIsActive(data.isActive());
+
+        return productCreated;
     }
 }

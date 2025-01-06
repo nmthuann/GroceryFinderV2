@@ -6,7 +6,6 @@ import com.nmt.groceryfinderv2.modules.products.documents.ProductDocument;
 import com.nmt.groceryfinderv2.modules.products.dtos.requests.CreateProductDto;
 import com.nmt.groceryfinderv2.modules.products.dtos.ProductDto;
 import com.nmt.groceryfinderv2.modules.products.dtos.requests.UpdateProductDto;
-import com.nmt.groceryfinderv2.utils.SlugUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVRecord;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -71,59 +71,29 @@ public class ProductService implements IProductService {
 
     @Override
     public ProductDto updateOneById(String id, UpdateProductDto data) throws ModuleException {
-        Optional<ProductDocument> productOpt = productRepository.findById(id);
-        if (productOpt.isEmpty()) {
-            throw new ModuleException(
-                    ProductsModuleExceptionMessages.GET_PRODUCT_ID_NOT_FOUND.getMessage() + "ID: " +id
-            );
-        }
-        ProductDocument productCreated = productOpt.get();
-        if (data.productName() != null) {
-            productCreated.setSlug(SlugUtil.createSlug(data.productName()));
-            productCreated.setNormalizedName(SlugUtil.replaceVietnameseChars(data.productName()));
-            productCreated.setProductName(data.productName());
+       ProductDocument productCreated = productRepository.findById(id).orElseThrow(() ->
+               new ModuleException(
+                       ProductsModuleExceptionMessages.GET_PRODUCT_ID_NOT_FOUND.getMessage() + "ID: " +id)
+       );
+
+       if(!Objects.equals(data.barcode(), productCreated.getBarcode())){
+           if(checkBarcodeExists(data.barcode())) {
+               throw new ModuleException(
+                       ProductsModuleExceptionMessages.GET_PRODUCT_BARCODE_ALREADY_EXISTS.getMessage()
+               );
+           }
         }
 
-        if (data.barcode() != null) {
-            productCreated.setBarcode(data.barcode());
+       if (!Objects.equals(data.productName(), productCreated.getProductName())) {
+           if(  checkProductNameDuplicate(data.productName())) {
+               throw new ModuleException(
+                       ProductsModuleExceptionMessages.GET_PRODUCT_NAME_ALREADY_EXISTS.getMessage()
+               );
+           }
         }
 
-        if (data.productThumb() != null) {
-            productCreated.setProductThumb(data.productThumb());
-        }
-
-        if (data.salePrice() != null) {
-            productCreated.setSalePrice(data.salePrice());
-        }
-
-        if (data.importPrice() != null) {
-            productCreated.setImportPrice(data.importPrice());
-        }
-
-        if (data.description() != null) {
-            productCreated.setDescription(data.description());
-        }
-
-        if (data.category() != null) {
-            productCreated.setCategory(data.category());
-        }
-
-        if (data.stock() != null) {
-            productCreated.setStock(data.stock());
-        }
-
-        if (data.sold() != null) {
-            productCreated.setSold(data.sold());
-        }
-
-        if (data.isActive() != null) {
-            productCreated.setIsActive(data.isActive());
-        }
-
-        if (data.specs() != null) {
-            productCreated.setSpecs(data.specs());
-        }
-        return this.productMapper.toDto(this.productRepository.save(productCreated));
+        ProductDocument updateProduct = this.productMapper.updateDocument(data, productCreated);
+        return this.productMapper.toDto(this.productRepository.save(updateProduct));
     }
 
 
@@ -158,6 +128,17 @@ public class ProductService implements IProductService {
     @Override
     public Boolean checkProductNameDuplicate(String productName) {
         return productRepository.findByProductName(productName).isPresent();
+    }
+
+    private Boolean checkBarcodeExists(String barcode){
+        if (barcode == null || barcode.trim().isEmpty()) {
+            throw new IllegalArgumentException(
+                    ProductsModuleExceptionMessages.BARCODE_NOT_EMPTY.getMessage()
+            );
+        }
+
+
+        return productRepository.findByBarcode(barcode).isPresent();
     }
 
     @Override

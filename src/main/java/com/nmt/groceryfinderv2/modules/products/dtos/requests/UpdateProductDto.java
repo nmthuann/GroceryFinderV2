@@ -1,10 +1,7 @@
 package com.nmt.groceryfinderv2.modules.products.dtos.requests;
 
-import com.nmt.groceryfinderv2.modules.products.documents.Specification;
 import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.URL;
-
-import java.util.List;
 
 /**
  * @author LENOVO
@@ -25,6 +22,7 @@ public record UpdateProductDto(
         @NotNull(message = "Import price is required")
         @PositiveOrZero(message = "Import Price must be zero or greater")
         Double importPrice,
+        @NotEmpty
         String description,
         @NotEmpty
         String category,
@@ -37,8 +35,7 @@ public record UpdateProductDto(
         @PositiveOrZero(message = "Display Price must be zero or greater")
         Integer sold,
         @NotNull
-        Boolean isActive,
-        List<Specification> specs
+        Boolean isActive
 ) {
 }
 

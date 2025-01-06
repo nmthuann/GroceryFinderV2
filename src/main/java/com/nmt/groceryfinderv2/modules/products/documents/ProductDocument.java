@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author LENOVO
@@ -65,4 +66,11 @@ public class ProductDocument {
     private Integer like;
 
     private List<Specification> specs;
+
+    @Field("price_history")
+    private List<?> priceHistory;
+
+    private List<?> reviews;
+
+    private Map<String, Object> metadata;
 }
