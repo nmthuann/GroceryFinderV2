@@ -24,53 +24,34 @@ public class ProductDocument {
     @Indexed(unique = true)
     private String barcode; // 1
 
+    @Indexed(unique = true)
+    private String slug;
+
     @Field("product_name")
     @Indexed(unique = true)
     private String productName; // 2
 
-    @Indexed
-    private String category; // 3
-
     @Field("product_thumb")
-    private String productThumb; // 4
+    private String productThumb; // 3
 
-    @Field("sale_price")
-    private Double salePrice; // 5
+    @Field("selling_price")
+    private Double sellingPrice; // 4
 
-    @Field("import_price")
-    private Double importPrice; // 6
+    @Field("display_price")
+    private Double displayPrice; // 5
 
-    private Integer sold;  // 7
+//    private String description; // 6
 
-    private Integer stock; // 8
+    @Field("category_id")
+    private String categoryId;
 
-    private String unit; // 9
-
-    private String description; // 10
-
-    @Indexed(unique = true)
-    private String slug;
-
-    @Field("normalized_name")
-    private String normalizedName;
-
-    @Field("category_url")
-    private String categoryUrl;
-
-    @Field("is_active")
-    private Boolean isActive;
-
-    @Field("view_count")
-    private Integer viewCount = 0;
-
-    private Integer like;
+    @Field("is_deleted")
+    private Boolean isDeleted;
 
     private List<Specification> specs;
 
     @Field("price_history")
     private List<?> priceHistory;
-
-    private List<?> reviews;
 
     private Map<String, Object> metadata;
 }

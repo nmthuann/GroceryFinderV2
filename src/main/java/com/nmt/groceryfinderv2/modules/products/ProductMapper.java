@@ -32,11 +32,11 @@ public class ProductMapper {
         target.setBarcode(source.getBarcode());
         target.setProductName(source.getProductName());
         target.setProductThumb(source.getProductThumb());
-        target.setSalePrice(source.getSalePrice());
-        target.setSold(source.getSold());
-        target.setIsActive(source.getIsActive());
+        target.setCategoryId(source.getCategoryId());
+        target.setSellingPrice(source.getSellingPrice());
+        target.setImportPrice(source.getDisplayPrice());
+        target.setIsActive(source.getIsDeleted());
     }
-
 
     public ProductDocument createDocument (CreateProductDto data) {
         Objects.requireNonNull(data, "CreateProductDto must not be null");
@@ -44,22 +44,13 @@ public class ProductMapper {
         productDocument.setSlug(SlugUtil.createSlug(data.productName()));
         productDocument.setBarcode(data.barcode());
         productDocument.setProductName(data.productName());
-        productDocument.setNormalizedName(SlugUtil.replaceVietnameseChars(data.productName()));
         productDocument.setProductThumb(data.productThumb());
-        productDocument.setSalePrice(data.salePrice());
-        productDocument.setImportPrice(data.importPrice());
-        productDocument.setDescription(data.description());
-        productDocument.setCategory(data.category());
-        productDocument.setUnit(data.unit());
-        productDocument.setCategoryUrl(SlugUtil.createSlug(data.category()));
-        productDocument.setStock(data.stock());
-        productDocument.setSold(200);
-        productDocument.setLike(10);
-        productDocument.setViewCount(0);
-        productDocument.setIsActive(true);
+        productDocument.setSellingPrice(data.salePrice());
+        productDocument.setDisplayPrice(data.importPrice());
+        productDocument.setCategoryId(data.category());
+        productDocument.setIsDeleted(true);
         productDocument.setSpecs(new ArrayList<>());
         productDocument.setPriceHistory(new ArrayList<>());
-        productDocument.setReviews(new ArrayList<>());
         productDocument.setMetadata(new HashMap<>());
         return productDocument;
     }
@@ -71,14 +62,10 @@ public class ProductMapper {
         productCreated.setBarcode(data.barcode());
         productCreated.setProductName(data.productName());
         productCreated.setProductThumb(data.productThumb());
-        productCreated.setSalePrice(data.salePrice());
-        productCreated.setImportPrice(data.importPrice());
-        productCreated.setDescription(data.description());
-        productCreated.setCategory(data.category());
-        productCreated.setUnit(data.unit());
-        productCreated.setStock(data.stock());
-        productCreated.setSold(data.sold());
-        productCreated.setIsActive(data.isActive());
+        productCreated.setSellingPrice(data.salePrice());
+        productCreated.setDisplayPrice(data.importPrice());
+        productCreated.setCategoryId(data.category());
+        productCreated.setIsDeleted(data.isActive());
 
         return productCreated;
     }

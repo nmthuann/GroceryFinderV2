@@ -1,9 +1,7 @@
 package com.nmt.groceryfinderv2.modules.products.dtos.requests;
 
-import com.nmt.groceryfinderv2.modules.products.documents.Specification;
 import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.URL;
-import java.util.List;
 
 /**
  * @author LENOVO
@@ -13,24 +11,24 @@ import java.util.List;
 public record CreateProductDto(
         @NotBlank(message = "Barcode is required")
         @Size(max = 20, message = "Barcode cannot exceed  characters")
-        String barcode,
+        String barcode, // 0
         @Size(max = 100, message = "Product name too long")
         @NotEmpty
-        String productName,
+        String productName, // 1
         @URL
-        String productThumb,
+        String productThumb, // 2
         @NotNull(message = "Selling price is required")
         @PositiveOrZero(message = "Selling Price must be zero or greater")
-        Double salePrice,
+        Double salePrice, // 3
         @PositiveOrZero(message = "Import price must be zero or greater")
-        Double importPrice,
+        Double importPrice,// 4
         @NotEmpty
-        String description,
+        String description, // 5
         @NotEmpty
-        String category,
+        String category, // 6
         @NotEmpty
-        String unit,
+        String unit, // 7
         @PositiveOrZero(message = "Stock must be zero or greater")
-        Integer stock
+        Integer stock// 8
 ) {
 }

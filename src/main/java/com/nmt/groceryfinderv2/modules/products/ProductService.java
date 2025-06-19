@@ -106,7 +106,6 @@ public class ProductService implements IProductService {
         return false;
     }
 
-
     @Override
     public Page<ProductDto> getPaginated(Pageable pageable) {
         // đọc cache
@@ -114,8 +113,6 @@ public class ProductService implements IProductService {
                 this.productMapper::toDto
         );
     }
-
-
 
     @Override
     public List<ProductDto> getProductsByCategory(String category) {
@@ -137,7 +134,6 @@ public class ProductService implements IProductService {
             );
         }
 
-
         return productRepository.findByBarcode(barcode).isPresent();
     }
 
@@ -148,31 +144,38 @@ public class ProductService implements IProductService {
         for (CSVRecord record : records) {
             String barcode = record.get(0).replaceAll("^\"|\"$", "");
             if (this.getOneByBarcode(barcode).isPresent()) {
-                throw new ModuleException("barcode with name '" + barcode + "' already exists.");
+                // ghi cả record vào file back up
+                // break qua dòng đó
+                throw new ModuleException(
+                        ProductsModuleExceptionMessages.GET_PRODUCT_BARCODE_ALREADY_EXISTS.getMessage()
+                );
             }
             String productName = record.get(1);
             if (this.checkProductNameDuplicate(productName)) {
-                throw new ModuleException("Product with name '" + productName + "' already exists.");
+                // ghi cả record vào file back up
+                // break qua dòng đó
+                throw new ModuleException(
+                        ProductsModuleExceptionMessages.GET_PRODUCT_NAME_ALREADY_EXISTS.getMessage()
+                );
             }
             String productThumb = record.get(2);
-            Double displayPrice = Double.parseDouble(record.get(3));
+            Double salePrice = Double.parseDouble(record.get(3));
             Double importPrice = Double.parseDouble(record.get(4));
             String description = record.get(5);
             String category = record.get(6);
-            String brand = record.get(7);
+            String unit = record.get(7);
             Integer stock = Integer.parseInt(record.get(8));
 
             CreateProductDto createProductDto = new CreateProductDto(
                     barcode,
                     productName,
                     productThumb,
-                    displayPrice,
+                    salePrice,
                     importPrice,
                     description,
                     category,
-                    brand,
+                    unit,
                     stock
-
             );
             ProductDocument productDocument = this.productMapper.createDocument(createProductDto);
             productDocuments.add(productDocument);

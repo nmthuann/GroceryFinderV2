@@ -35,3 +35,7 @@ build/
 #logs
 /logs
 *.log
+
+note.txt
+src/main/resources
+*.properties

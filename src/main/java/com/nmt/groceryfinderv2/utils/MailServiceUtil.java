@@ -23,7 +23,6 @@ public class MailServiceUtil {
         this.mailSender = mailSender;
     }
 
-
     public void sendEmail(String to, String subject, String body) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);

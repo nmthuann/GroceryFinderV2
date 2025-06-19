@@ -37,15 +37,11 @@ public class RedisConfig {
         return new LettuceConnectionFactory(configuration);
     }
 
-
     @Bean
     RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
-
-        // Sử dụng StringRedisSerializer cho các khóa (keys)
         template.setKeySerializer(new StringRedisSerializer());
-        // Sử dụng GenericJackson2JsonRedisSerializer cho các giá trị (values)
         template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
         template.setHashKeySerializer(new StringRedisSerializer());
         template.setHashValueSerializer(new Jackson2JsonRedisSerializer<>(Object.class));
